@@ -1,34 +1,31 @@
-const express=require('express');
-const router=express.Router();
-const MenuItem=require('./../models/MenuItems');
+// const nongoose=require('mongoose');
 
-router.post('/',async(req,res)=>{
-    try{
-        const data=req.body
-        const newMenu= new MenuItem(data);
-        const response=await newMenu.save();
-        console.log('data saved');
-        res.status(200).json(response);
-        
-    }
-    catch(err){
-        console.log(err);
-        res.status(500).json({error:'Internal Server Error'});
+// const personSchema=new MongoKerberosError.Schema({
+//     name:{
+//         type:String,
+//         require:true
+//     },
+//     age:{
+//         type:String,
+//         require:true
+//     },
+//     work:{
+//         type:String,
+//         enum:['chef','waiter','manager'],
+//         require:true
+//     },
+//     mobile:{
+//         type:String,
+//         require:true
+//     },
+//     email:{
+//         type:String,
+//         require:true,
+//         unique:true
+//     },
+// })
 
-        
-    }
-})
+console.log("prince");
 
-router.get('/',async(req,res)=>{
-    try{
-        const data= await MenuItem.find();
-        console.log('data fetched');
-        
-
-    }
-    catch{
-
-    }
-})
 
 
