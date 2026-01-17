@@ -3,9 +3,10 @@ require('dotenv').config();
 
 
 // const mongoURL=process.env.MONGODB_URL_LOCAL
-const mongoURL=process.env.MONGODB_URL;
 
-// const mongoURL='mongodb+srv://princekumarsahu321_db_user:QCG7PAAChiCnEBOQ@cluster0.jnricrd.mongodb.net/'
+// const mongoURL=process.env.MONGODB_URL;
+
+const mongoURL='mongodb+srv://princekumarsahu321_db_user:QCG7PAAChiCnEBOQ@cluster0.jnricrd.mongodb.net/'
 
 
 mongoose.connect(mongoURL,{
