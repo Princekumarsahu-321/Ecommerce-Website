@@ -1,79 +1,94 @@
 const mongoose=require('mongoose');
-const bcrypty=require('bcrypty');
+const bcrypt=require('bcrypt');
 
-const personSchema=new MongoKerberosError.Schema({
+const personSchema=new mongoose.Schema({
     name:{
         type:String,
         require:true
     },
     age:{
-        type:String,
+        type:Number,
         require:true
     },
     work:{
-        type:String,
-        enum:['chef','waiter','manager'],
-        require:true
-    },
-    mobile:{
         type:String,
         require:true
     },
     email:{
         type:String,
-        require:true,
-        unique:true
+        require:true
     },
-     address:{
-        type:String,
-        
-    },
-    salary:{
-        type:Number,
-        require:true,
-        
-    },
-     username:{
+    address:{
         type:String,
         require:true
     },
-    passport:{
+    username:{
         type:String,
-        require:true,
-        
+        require:true
     },
-})
-
-personSchema.pre('save',async function(next){
-    const person=this;
-
-    if(!person.isModified('person'))return next();
-
-    try{
-        const salt=await bcrypty.genSalt(10);
-
-        const hashPassword=await bcrypty.hash(person.password,salt);
-
-        person.password=hashPassword;
-        next();
-
-    }
-    catch (err){
-        return next(err);
-
+    password:{
+        type:String,
+        require:true
     }
 })
 
-personSchema.method.comparePassword=async function(candiatePassword){
+
+personSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+
+
+
+// personSchema.pre('save',async function(next){
+//     const person=this;
+//     if(!person.isModified('passport')) return next();
+//     // if (!person.isModified('password')) return next();
+//     try{
+//         const salt=await bcrypt.genSalt(10);
+
+//         const hashPassword=await bcrypt.hashPassword(person.password,salt);
+//         // const hashedPassword = await bcrypt.hash(person.password, salt);
+//         person.password=hashPassword;
+//         next();
+//     }catch(err){
+//         return next(err);
+//     }
+// })
+
+
+// // Hashing password
+// personSchema.pre('save', async function() {
+//   if (!this.isModified('password')) return; // correct field name
+
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+// });
+
+
+
+// // Compare password
+// personSchema.methods.comparePassword = async function(candidatePassword) {
+//   if (!candidatePassword || !this.password) return false;
+//   return await bcrypt.compare(candidatePassword, this.password);
+// };
+
+
+
+personSchema.methods.comparePassword=async function(candidatePassword){
     try{
-        const isMatch=await bcrypty.compare(candiatePassword,this.password);
+        const isMatch=await bcrypt.compare(candidatePassword,this.password);
         return isMatch;
 
-    }
-    catch(err){
+    }catch(err){
         throw err;
+
+
     }
 }
 
-const Person=mongoose.model('person',personSchema);
-module.exports=Person;
+module.exports=mongoose.model('person',personSchema)
+
